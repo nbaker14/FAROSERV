@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAROSERV — Estudio de tecnología · Ecuador</title>
+  <meta name="description" content="Construimos apps y plataformas a medida para empresas, y operamos nuestros propios productos SaaS. Guayaquil, Ecuador."/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- React -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel (lets the browser understand JSX) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Space Grotesk", sans-serif;
+      background: #0B0D12;
+      color: #EFEAE0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    img { max-width: 100%; }
+    ::selection { background: rgba(242, 196, 117, 0.3); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Load components in order (each file attaches to window) -->
+  <script type="text/babel" src="content.jsx"></script>
+  <script type="text/babel" src="logo.jsx"></script>
+  <script type="text/babel" src="mockups.jsx"></script>
+  <script type="text/babel" src="sections.jsx"></script>
+
+  <!-- Mount the app -->
+  <script type="text/babel">
+    function App() {
+      return (
+        <>
+          <Nav />
+          <Hero />
+          <Model />
+          <Products />
+          <Process />
+          <Contact />
+          <Footer />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
