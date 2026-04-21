@@ -27,7 +27,7 @@ const PRODUCTS = [
     description: 'Plataforma de monitoreo de riesgo laboral. Escaneo mensual automatizado de empleados en 12 fuentes oficiales del Estado, detección de cambios, alertas y cumplimiento LOPDP integrado.',
     industry: 'RRHH · Compliance',
     color: '#3BB0B8',
-    screenshot: 'site/statusec-screenshot.png',
+    screenshot: 'statusec-screenshot.png',
   },
   {
     id: 'camaron',
@@ -39,7 +39,7 @@ const PRODUCTS = [
     description: 'Software para productores de camarón: manejo de costos, proyección de crecimiento y cosecha, e inteligencia artificial que aprende del comportamiento de cada piscina para maximizar la utilidad.',
     industry: 'Acuacultura',
     color: '#E5A13A',
-    screenshot: 'site/camaron-screenshot.png',
+    screenshot: 'camaron-screenshot.png',
   },
   {
     id: 'eljuri-lines',
