@@ -114,16 +114,30 @@ function Model() {
             El software ya no se entrega y se olvida. Diseñamos la relación para que el producto siga vivo, con un plan mensual que hace sentido para el cliente y para nuestro equipo.
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, background: BRAND.line, border: `1px solid ${BRAND.line}` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
           {pillars.map((p, i) => (
-            <div key={i} style={{ background: BRAND.ink, padding: '36px 32px', minHeight: 200 }}>
-              <div style={{ fontSize: 11, color: BRAND.textFaint, letterSpacing: '0.18em', marginBottom: 20, fontFamily: '"JetBrains Mono", monospace' }}>
+            <div key={i} style={{
+              background: BRAND.paper, padding: '40px 36px', minHeight: 220,
+              borderRadius: 6, position: 'relative', overflow: 'hidden',
+              borderLeft: `4px solid ${BRAND.amber}`,
+            }}>
+              <div style={{
+                fontSize: 64, fontWeight: 700, color: 'rgba(11, 13, 18, 0.06)',
+                position: 'absolute', top: 14, right: 20, fontFamily: '"JetBrains Mono", monospace',
+                lineHeight: 1,
+              }}>
                 0{i+1}
               </div>
-              <div style={{ fontSize: 28, fontWeight: 600, color: BRAND.text, letterSpacing: '-0.02em', marginBottom: 12 }}>
+              <div style={{
+                fontSize: 12, color: BRAND.amber, letterSpacing: '0.18em', marginBottom: 22,
+                fontFamily: '"JetBrains Mono", monospace', fontWeight: 600,
+              }}>
+                0{i+1}
+              </div>
+              <div style={{ fontSize: 26, fontWeight: 700, color: BRAND.ink, letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.15 }}>
                 {p.k}
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.55, color: BRAND.textDim }}>
+              <div style={{ fontSize: 15, lineHeight: 1.6, color: '#4A4D55' }}>
                 {p.v}
               </div>
             </div>
