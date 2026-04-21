@@ -26,7 +26,7 @@ function Nav() {
         <a href="#proceso" style={link} onMouseEnter={e=>e.currentTarget.style.opacity=1} onMouseLeave={e=>e.currentTarget.style.opacity=0.75}>Proceso</a>
         <a href="#contacto" style={link} onMouseEnter={e=>e.currentTarget.style.opacity=1} onMouseLeave={e=>e.currentTarget.style.opacity=0.75}>Contacto</a>
       </div>
-      <a href="#contacto" style={{
+      <a href="https://wa.me/593998055872?text=Hola%20FAROSERV%2C%20me%20interesar%C3%ADa%20conversar%20sobre%20un%20proyecto%20nuevo" target="_blank" rel="noreferrer" style={{
         textDecoration: 'none', color: BRAND.ink, background: BRAND.amber,
         padding: '10px 18px', borderRadius: 999, fontSize: 13, fontWeight: 600, letterSpacing: '0.01em',
         whiteSpace: 'nowrap',
@@ -392,17 +392,17 @@ function Contact() {
             <div style={{ fontSize: 11, color: BRAND.textFaint, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
               Escríbenos
             </div>
-            <a href="mailto:hola@faroserv.com" style={{
+            <a href="mailto:ventas@faroserv.com" style={{
               fontSize: 28, fontWeight: 500, letterSpacing: '-0.02em', color: BRAND.text,
               textDecoration: 'none', borderBottom: `1px solid ${BRAND.lineStrong}`, paddingBottom: 2,
-            }}>hola@faroserv.com</a>
+            }}>ventas@faroserv.com</a>
           </div>
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontSize: 11, color: BRAND.textFaint, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
               WhatsApp
             </div>
             <div style={{ fontSize: 18, color: BRAND.text, fontFamily: '"JetBrains Mono", monospace' }}>
-              +593 99 000 0000
+              +593 99 805 5872
             </div>
           </div>
           <div>
@@ -414,7 +414,7 @@ function Contact() {
               <span style={{ color: BRAND.textDim }}>Trabajamos remoto con clientes en toda LATAM.</span>
             </div>
           </div>
-          <a href="mailto:hola@faroserv.com" style={{
+          <a href="https://wa.me/593998055872?text=Hola%20FAROSERV%2C%20me%20interesar%C3%ADa%20conversar%20sobre%20un%20proyecto%20nuevo" target="_blank" rel="noreferrer" style={{
             marginTop: 36, display: 'inline-flex', alignItems: 'center', gap: 10,
             textDecoration: 'none', color: BRAND.ink, background: BRAND.amber,
             padding: '14px 24px', borderRadius: 999, fontSize: 14, fontWeight: 600,
