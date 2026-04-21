@@ -120,7 +120,7 @@ function Model() {
               <div style={{ fontSize: 11, color: BRAND.textFaint, letterSpacing: '0.18em', marginBottom: 20, fontFamily: '"JetBrains Mono", monospace' }}>
                 0{i+1}
               </div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: BRAND.text, letterSpacing: '-0.015em', marginBottom: 10 }}>
+              <div style={{ fontSize: 28, fontWeight: 600, color: BRAND.text, letterSpacing: '-0.02em', marginBottom: 12 }}>
                 {p.k}
               </div>
               <div style={{ fontSize: 14, lineHeight: 1.55, color: BRAND.textDim }}>
