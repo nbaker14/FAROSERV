@@ -94,7 +94,7 @@ function Model() {
   const pillars = [
     { k: 'Sin presupuestos gigantes', v: 'Se acabaron los proyectos de seis cifras que terminan en features que nunca se usan.' },
     { k: 'Planes mensuales', v: 'Un fee predecible cubre diseño, desarrollo, infraestructura y soporte continuo.' },
-    { k: 'Construimos contigo', v: 'Iteramos al lado de tu equipo. Escuchamos el cambio y lo implementamos en semanas.' },
+    { k: 'Construimos contigo', v: 'Iteramos al lado de tu equipo. Escuchamos el cambio y lo implementamos en días.' },
     { k: 'Producto que evoluciona', v: 'El software se adapta al uso real. Sin volver a cotizar cada mejora.' },
   ];
   return (
