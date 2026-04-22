@@ -4,6 +4,9 @@ window.JotForm = (function() {
   var FORM_ID = '210397942899070';
   var BASE = 'https://api.jotform.com';
 
+  // Cache the total submission count
+  var _cachedTotal = null;
+
   function getAnswer(answers, fieldId) {
     var a = answers[fieldId];
     if (!a) return '';
@@ -76,29 +79,45 @@ window.JotForm = (function() {
     };
   }
 
+  // Get total submission count from the form endpoint (cached)
+  function getTotalCount() {
+    if (_cachedTotal !== null) {
+      return Promise.resolve(_cachedTotal);
+    }
+    return fetch(BASE + '/form/' + FORM_ID + '?apiKey=' + API_KEY)
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        _cachedTotal = parseInt(json.content.count) || 0;
+        return _cachedTotal;
+      });
+  }
+
   function fetchSubmissions(offset, limit) {
     offset = offset || 0;
-    limit = limit || 20;
+    limit = limit || 50;
     var url = BASE + '/form/' + FORM_ID + '/submissions'
       + '?apiKey=' + API_KEY
       + '&limit=' + limit
       + '&offset=' + offset
       + '&orderby=created_at,DESC';
 
-    return fetch(url)
-      .then(function(r) { return r.json(); })
-      .then(function(json) {
-        var content = json.content || [];
-        return {
-          submissions: content.map(parseSubmission),
-          total: json.resultSet ? json.resultSet.count : content.length,
-        };
-      });
+    return Promise.all([
+      fetch(url).then(function(r) { return r.json(); }),
+      getTotalCount(),
+    ]).then(function(results) {
+      var json = results[0];
+      var totalCount = results[1];
+      var content = json.content || [];
+      return {
+        submissions: content.map(parseSubmission),
+        total: totalCount,
+      };
+    });
   }
 
   function searchSubmissions(term, offset, limit) {
     offset = offset || 0;
-    limit = limit || 20;
+    limit = limit || 50;
     var filter = encodeURIComponent(JSON.stringify({ '8:contains': term }));
     var url = BASE + '/form/' + FORM_ID + '/submissions'
       + '?apiKey=' + API_KEY
@@ -111,9 +130,13 @@ window.JotForm = (function() {
       .then(function(r) { return r.json(); })
       .then(function(json) {
         var content = json.content || [];
+        // For search, we don't know the true total — if we got a full page,
+        // there are probably more. Use a high estimate so pagination shows.
+        var hasMore = content.length >= limit;
+        var estimatedTotal = hasMore ? offset + limit + limit : offset + content.length;
         return {
           submissions: content.map(parseSubmission),
-          total: json.resultSet ? json.resultSet.count : content.length,
+          total: estimatedTotal,
         };
       });
   }
@@ -122,5 +145,6 @@ window.JotForm = (function() {
     fetchSubmissions: fetchSubmissions,
     searchSubmissions: searchSubmissions,
     parseSubmission: parseSubmission,
+    getTotalCount: getTotalCount,
   };
 })();
