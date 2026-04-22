@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LÍNEAS — Mantenimiento de líneas de cerveza</title>
+  <meta name="description" content="Plataforma de seguimiento de mantenimiento de líneas de cerveza — Almacenes Juan Eljuri"/>
+
+  <!-- Fonts (same as main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="lineas.css"/>
+
+  <!-- React 18 from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- htm — JSX-like tagged templates, no build step -->
+  <script crossorigin src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
+
+  <!-- Supabase JS client from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Config (Supabase keys) -->
+  <script src="config.js"></script>
+
+  <!-- Lib -->
+  <script src="lib/supabase.js"></script>
+  <script src="lib/auth.js"></script>
+  <script src="lib/jotform.js"></script>
+
+  <!-- Components -->
+  <script src="components/LoginPage.js"></script>
+  <script src="components/Layout.js"></script>
+  <script src="components/DashboardPage.js"></script>
+  <script src="components/ClientsPage.js"></script>
+  <script src="components/ClientForm.js"></script>
+  <script src="components/ClientDetail.js"></script>
+  <script src="components/RoutesPage.js"></script>
+  <script src="components/VisitHistory.js"></script>
+
+  <!-- App (router + mount) -->
+  <script src="app.js"></script>
+</body>
+</html>
