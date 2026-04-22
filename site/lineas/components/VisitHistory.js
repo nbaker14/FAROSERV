@@ -152,31 +152,33 @@
     var total = React.useState(0), setTotal = total[1]; total = total[0];
     var page = React.useState(0), setPage = page[1]; page = page[0];
     var search = React.useState(''), setSearch = search[1]; search = search[0];
+    var debouncedSearch = React.useState(''), setDebouncedSearch = debouncedSearch[1]; debouncedSearch = debouncedSearch[0];
     var expanded = React.useState(null), setExpanded = expanded[1]; expanded = expanded[0];
     var lightbox = React.useState(null), setLightbox = lightbox[1]; lightbox = lightbox[0];
 
-    function load() {
+    // Debounce search input
+    React.useEffect(function() {
+      var t = setTimeout(function() { setDebouncedSearch(search); setPage(0); }, 400);
+      return function() { clearTimeout(t); };
+    }, [search]);
+
+    // Load data whenever page or debouncedSearch changes
+    React.useEffect(function() {
       setLoading(true);
       var offset = page * PAGE_SIZE;
-      var promise = search.trim()
-        ? JotForm.searchSubmissions(search.trim(), offset, PAGE_SIZE)
+      var promise = debouncedSearch.trim()
+        ? JotForm.searchSubmissions(debouncedSearch.trim(), offset, PAGE_SIZE)
         : JotForm.fetchSubmissions(offset, PAGE_SIZE);
       promise.then(function(res) {
         setSubs(res.submissions);
-        setTotal(res.total);
+        setTotal(parseInt(res.total) || 0);
         setLoading(false);
       }).catch(function() {
         setSubs([]); setTotal(0); setLoading(false);
       });
-    }
+    }, [page, debouncedSearch]);
 
-    React.useEffect(load, [page]);
-    React.useEffect(function() {
-      var t = setTimeout(function() { setPage(0); load(); }, 400);
-      return function() { clearTimeout(t); };
-    }, [search]);
-
-    var totalPages = Math.ceil(total / PAGE_SIZE);
+    var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
     return h`
       <div>
@@ -307,13 +309,19 @@
             })}
           </div>
 
-          ${totalPages > 1 && h`
-            <div class="pagination">
-              <button class="pagination-btn" disabled=${page === 0} onClick=${function() { setPage(page - 1); }}>\u2190 Anterior</button>
-              <span class="pagination-info">P\u00e1g. ${page + 1} de ${totalPages}</span>
-              <button class="pagination-btn" disabled=${page >= totalPages - 1} onClick=${function() { setPage(page + 1); }}>Siguiente \u2192</button>
-            </div>
-          `}
+        `}
+
+        <!-- Pagination (always visible) -->
+        ${total > PAGE_SIZE && h`
+          <div class="pagination" style=${{ marginTop: '16px', padding: '12px', background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '4px' }}>
+            <button class="pagination-btn" disabled=${page === 0 || loading}
+              onClick=${function() { setPage(page - 1); window.scrollTo(0, 0); }}>\u2190 Anterior</button>
+            <span class="pagination-info">
+              P\u00e1g. ${page + 1} de ${totalPages} \u00b7 ${total.toLocaleString()} reportes
+            </span>
+            <button class="pagination-btn" disabled=${page >= totalPages - 1 || loading}
+              onClick=${function() { setPage(page + 1); window.scrollTo(0, 0); }}>Siguiente \u2192</button>
+          </div>
         `}
 
         <!-- Photo Lightbox -->
