@@ -27,6 +27,16 @@
 <body>
   <div id="app"></div>
 
+  <!-- Global error handler — shows JS errors on screen for debugging -->
+  <script>
+    window.onerror = function(msg, src, line, col, err) {
+      var el = document.getElementById('app');
+      el.style.cssText = 'padding:40px;font-family:monospace;color:red;white-space:pre-wrap;';
+      el.textContent += 'ERROR: ' + msg + '\nFile: ' + src + '\nLine: ' + line + '\n\n';
+      return false;
+    };
+  </script>
+
   <!-- Config (Supabase keys) -->
   <script src="config.js"></script>
 
