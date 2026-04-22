@@ -1,7 +1,7 @@
 // VisitHistory — full visit log with JotForm photos, geo, tank data + Supabase tab
 (function() {
   var h = htm.bind(React.createElement);
-  var PAGE_SIZE = 20;
+  var PAGE_SIZE = 50;
 
   function formatDate(dateStr) {
     if (!dateStr) return '\u2014';
