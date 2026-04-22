@@ -148,46 +148,91 @@
   // ─── JotForm Submissions Tab (expanded with photos + geo + tank) ───
   function JotFormTab() {
     var loading = React.useState(true), setLoading = loading[1]; loading = loading[0];
-    var subs = React.useState([]), setSubs = subs[1]; subs = subs[0];
+    var allSubs = React.useState([]), setAllSubs = allSubs[1]; allSubs = allSubs[0];
     var total = React.useState(0), setTotal = total[1]; total = total[0];
     var page = React.useState(0), setPage = page[1]; page = page[0];
-    var search = React.useState(''), setSearch = search[1]; search = search[0];
-    var debouncedSearch = React.useState(''), setDebouncedSearch = debouncedSearch[1]; debouncedSearch = debouncedSearch[0];
     var expanded = React.useState(null), setExpanded = expanded[1]; expanded = expanded[0];
     var lightbox = React.useState(null), setLightbox = lightbox[1]; lightbox = lightbox[0];
 
-    // Debounce search input
-    React.useEffect(function() {
-      var t = setTimeout(function() { setDebouncedSearch(search); setPage(0); }, 400);
-      return function() { clearTimeout(t); };
-    }, [search]);
+    // Filters
+    var search = React.useState(''), setSearch = search[1]; search = search[0];
+    var fCiudad = React.useState(''), setFCiudad = fCiudad[1]; fCiudad = fCiudad[0];
+    var fMarca = React.useState(''), setFMarca = fMarca[1]; fMarca = fMarca[0];
+    var fTrabajo = React.useState(''), setFTrabajo = fTrabajo[1]; fTrabajo = fTrabajo[0];
 
-    // Load data whenever page or debouncedSearch changes
+    // Load data from JotForm API with server-side dropdown filters
     React.useEffect(function() {
       setLoading(true);
       var offset = page * PAGE_SIZE;
-      var promise = debouncedSearch.trim()
-        ? JotForm.searchSubmissions(debouncedSearch.trim(), offset, PAGE_SIZE)
-        : JotForm.fetchSubmissions(offset, PAGE_SIZE);
-      promise.then(function(res) {
-        setSubs(res.submissions);
-        setTotal(parseInt(res.total) || 0);
-        setLoading(false);
-      }).catch(function() {
-        setSubs([]); setTotal(0); setLoading(false);
+      var filters = {};
+      if (fCiudad) filters.ciudad = fCiudad;
+      if (fMarca) filters.marca = fMarca;
+      if (fTrabajo) filters.trabajo = fTrabajo;
+      JotForm.fetchSubmissions(offset, PAGE_SIZE, filters)
+        .then(function(res) {
+          setAllSubs(res.submissions);
+          setTotal(parseInt(res.total) || 0);
+          setLoading(false);
+        }).catch(function() {
+          setAllSubs([]); setTotal(0); setLoading(false);
+        });
+    }, [page, fCiudad, fMarca, fTrabajo]);
+
+    // Reset page when filters change
+    React.useEffect(function() { setPage(0); }, [fCiudad, fMarca, fTrabajo]);
+
+    // Client-side text search on loaded results
+    var subs = allSubs;
+    if (search.trim()) {
+      var s = search.trim().toLowerCase();
+      subs = allSubs.filter(function(sub) {
+        return (sub.cliente && sub.cliente.toLowerCase().indexOf(s) !== -1) ||
+          (sub.tecnico && sub.tecnico.toLowerCase().indexOf(s) !== -1) ||
+          (sub.notas && sub.notas.toLowerCase().indexOf(s) !== -1) ||
+          (sub.trabajoPendiente && sub.trabajoPendiente.toLowerCase().indexOf(s) !== -1);
       });
-    }, [page, debouncedSearch]);
+    }
 
     var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
     return h`
       <div>
-        <div class="search-bar">
-          <input class="search-input" type="text" placeholder="Buscar por nombre de local..."
+        <!-- Filters -->
+        <div class="search-bar" style=${{ flexWrap: 'wrap' }}>
+          <input class="search-input" type="text"
+            placeholder="Buscar en p\u00e1gina actual (local, t\u00e9cnico, notas)..."
             value=${search} onInput=${function(e) { setSearch(e.target.value); }} />
-          <div class="pagination-info" style=${{ display: 'flex', alignItems: 'center' }}>
-            ${total.toLocaleString()} reportes en JotForm
-          </div>
+          <select class="form-select" style=${{ width: 'auto', minWidth: '130px' }}
+            value=${fCiudad} onChange=${function(e) { setFCiudad(e.target.value); }}>
+            <option value="">Todas las ciudades</option>
+            <option value="GUAYAQUIL">Guayaquil</option>
+            <option value="QUITO">Quito</option>
+            <option value="CUENCA">Cuenca</option>
+            <option value="MANTA">Manta</option>
+            <option value="MONTANITA / OLON">Monta\u00f1ita / Ol\u00f3n</option>
+            <option value="SALINAS">Salinas</option>
+            <option value="DAULE">Daule</option>
+            <option value="MACHALA">Machala</option>
+          </select>
+          <select class="form-select" style=${{ width: 'auto', minWidth: '130px' }}
+            value=${fMarca} onChange=${function(e) { setFMarca(e.target.value); }}>
+            <option value="">Todas las marcas</option>
+            <option value="LATITUDE CERO">Latitude Cero</option>
+            <option value="ODISEA">Odisea</option>
+            <option value="PARAMO">P\u00e1ramo</option>
+            <option value="LA PAZ">La Paz</option>
+            <option value="BEERMAN">Beerman</option>
+            <option value="OTRA">Otra</option>
+          </select>
+          <select class="form-select" style=${{ width: 'auto', minWidth: '140px' }}
+            value=${fTrabajo} onChange=${function(e) { setFTrabajo(e.target.value); }}>
+            <option value="">Todos los trabajos</option>
+            <option value="MANTENIMIENTO">Mantenimiento</option>
+            <option value="VISITA EMERGENCIA">Emergencia</option>
+            <option value="INSTALACION">Instalaci\u00f3n</option>
+            <option value="DESINSTALACION">Desinstalaci\u00f3n</option>
+            <option value="VISITA TECNICA">Visita t\u00e9cnica</option>
+          </select>
         </div>
 
         ${loading ? h`<div class="loading"><div class="spinner" />Cargando reportes de JotForm...</div>` : h`

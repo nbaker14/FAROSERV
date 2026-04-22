@@ -4,7 +4,6 @@ window.JotForm = (function() {
   var FORM_ID = '210397942899070';
   var BASE = 'https://api.jotform.com';
 
-  // Cache the total submission count
   var _cachedTotal = null;
 
   function getAnswer(answers, fieldId) {
@@ -13,7 +12,6 @@ window.JotForm = (function() {
     return a.prettyFormat || a.answer || '';
   }
 
-  // Parse geo stamp text into structured object
   function parseGeo(raw) {
     if (!raw) return null;
     var lines = raw.split('\n');
@@ -33,7 +31,6 @@ window.JotForm = (function() {
   function parseSubmission(sub) {
     var a = sub.answers || {};
 
-    // Photos — extract URLs
     var photos = [];
     var photoFields = [
       { id: '17', label: 'Reporte firmado' },
@@ -44,16 +41,11 @@ window.JotForm = (function() {
     for (var i = 0; i < photoFields.length; i++) {
       var pf = photoFields[i];
       var val = getAnswer(a, pf.id);
-      if (val) {
-        photos.push({ label: pf.label, url: val });
-      }
+      if (val) photos.push({ label: pf.label, url: val });
     }
 
-    // Geo location — parse from geo stamp (field 16 or 74)
     var geoRaw = getAnswer(a, '16') || getAnswer(a, '74');
     var geo = parseGeo(geoRaw);
-
-    // Coordinates from field 75
     var coordsRaw = getAnswer(a, '75');
     if (coordsRaw && !geo) geo = {};
     if (coordsRaw && geo) {
@@ -79,11 +71,8 @@ window.JotForm = (function() {
     };
   }
 
-  // Get total submission count from the form endpoint (cached)
   function getTotalCount() {
-    if (_cachedTotal !== null) {
-      return Promise.resolve(_cachedTotal);
-    }
+    if (_cachedTotal !== null) return Promise.resolve(_cachedTotal);
     return fetch(BASE + '/form/' + FORM_ID + '?apiKey=' + API_KEY)
       .then(function(r) { return r.json(); })
       .then(function(json) {
@@ -92,58 +81,55 @@ window.JotForm = (function() {
       });
   }
 
-  function fetchSubmissions(offset, limit) {
-    offset = offset || 0;
-    limit = limit || 50;
-    var url = BASE + '/form/' + FORM_ID + '/submissions'
-      + '?apiKey=' + API_KEY
-      + '&limit=' + limit
-      + '&offset=' + offset
-      + '&orderby=created_at,DESC';
-
-    return Promise.all([
-      fetch(url).then(function(r) { return r.json(); }),
-      getTotalCount(),
-    ]).then(function(results) {
-      var json = results[0];
-      var totalCount = results[1];
-      var content = json.content || [];
-      return {
-        submissions: content.map(parseSubmission),
-        total: totalCount,
-      };
-    });
+  // Build filter object from dropdown filters
+  // JotForm uses "q" + fieldId for exact match (case insensitive)
+  function buildFilter(filters) {
+    var f = {};
+    if (filters.ciudad) f.q7 = filters.ciudad;
+    if (filters.marca) f.q3 = filters.marca;
+    if (filters.trabajo) f.q25 = filters.trabajo;
+    if (filters.tecnico) f.q11 = filters.tecnico;
+    if (Object.keys(f).length === 0) return '';
+    return '&filter=' + encodeURIComponent(JSON.stringify(f));
   }
 
-  function searchSubmissions(term, offset, limit) {
+  function fetchSubmissions(offset, limit, filters) {
     offset = offset || 0;
     limit = limit || 50;
-    var filter = encodeURIComponent(JSON.stringify({ '8:contains': term }));
+    filters = filters || {};
+    var filterStr = buildFilter(filters);
     var url = BASE + '/form/' + FORM_ID + '/submissions'
       + '?apiKey=' + API_KEY
       + '&limit=' + limit
       + '&offset=' + offset
       + '&orderby=created_at,DESC'
-      + '&filter=' + filter;
+      + filterStr;
 
-    return fetch(url)
-      .then(function(r) { return r.json(); })
-      .then(function(json) {
-        var content = json.content || [];
-        // For search, we don't know the true total — if we got a full page,
-        // there are probably more. Use a high estimate so pagination shows.
-        var hasMore = content.length >= limit;
-        var estimatedTotal = hasMore ? offset + limit + limit : offset + content.length;
-        return {
-          submissions: content.map(parseSubmission),
-          total: estimatedTotal,
-        };
-      });
+    var promises = [
+      fetch(url).then(function(r) { return r.json(); }),
+    ];
+    // Only fetch total when no filters are applied
+    if (!filterStr) {
+      promises.push(getTotalCount());
+    }
+
+    return Promise.all(promises).then(function(results) {
+      var json = results[0];
+      var content = json.content || [];
+      var subs = content.map(parseSubmission);
+      // When filtering, we estimate total: if full page returned, there's more
+      var total;
+      if (filterStr) {
+        total = content.length < limit ? offset + content.length : offset + limit + limit;
+      } else {
+        total = results[1]; // cached total
+      }
+      return { submissions: subs, total: total };
+    });
   }
 
   return {
     fetchSubmissions: fetchSubmissions,
-    searchSubmissions: searchSubmissions,
     parseSubmission: parseSubmission,
     getTotalCount: getTotalCount,
   };
