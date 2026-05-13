@@ -120,151 +120,163 @@ function LineasDashboard() {
   );
 }
 
-function SaludDashboard() {
+function FletesXDashboard() {
   const c = {
-    bg: '#F4F6F5', ink: '#0F1F1C', border: '#DCE3E0', textDim: '#6B7673',
-    green: '#2F7D5F', amber: '#D4921A', red: '#B23F2E', blue: '#2E5F8C',
-    panel: '#fff',
+    bg: '#F5F4F0', ink: '#1A2A52', border: '#E0DDD4', textDim: '#6B6B6B',
+    orange: '#F37021', yellow: '#FBB040', green: '#3A8F5C', red: '#C0432B',
+    navy: '#1A2A52',
   };
   const F = `"Space Grotesk", sans-serif`;
   const M = `"JetBrains Mono", monospace`;
-  const records = [
-    { name: 'María Fernanda Álava', dept: 'Producción', exam: 'Audiometría', status: 'vigente', exp: '14 oct 2026', risk: 'bajo' },
-    { name: 'Carlos Jiménez Ruiz', dept: 'Planta', exam: 'Espirometría', status: 'vence-pronto', exp: '02 may 2026', risk: 'medio' },
-    { name: 'Andrea Cevallos M.', dept: 'Logística', exam: 'Visual', status: 'vigente', exp: '22 nov 2026', risk: 'bajo' },
-    { name: 'José Luis Moreira', dept: 'Producción', exam: 'Preempleo', status: 'vencido', exp: '08 abr 2026', risk: 'alto' },
-    { name: 'Patricia Zambrano V.', dept: 'Administración', exam: 'Anual', status: 'vigente', exp: '18 sep 2026', risk: 'bajo' },
-    { name: 'Freddy Mendoza C.', dept: 'Bodega', exam: 'Trabajo en altura', status: 'vence-pronto', exp: '29 abr 2026', risk: 'medio' },
+  const movements = [
+    { id: 'FX-1042', route: 'Guayaquil → Quito', type: 'propio', driver: 'R. Méndez', plate: 'GYE-4821', status: 'transit', eta: '14:30' },
+    { id: 'FX-1043', route: 'Durán → Machala', type: 'tercero', driver: 'J. Villacrés', plate: 'AZG-0917', status: 'transit', eta: '11:15' },
+    { id: 'FX-1044', route: 'Guayaquil → Cuenca', type: 'propio', driver: 'M. Cedeño', plate: 'GYE-3305', status: 'loading', eta: '—' },
+    { id: 'FX-1045', route: 'Quito → Ambato', type: 'tercero', driver: 'P. Ramos', plate: 'PCH-2244', status: 'delivered', eta: '09:40' },
+    { id: 'FX-1046', route: 'Guayaquil → Manta', type: 'propio', driver: 'L. Bravo', plate: 'GYE-5510', status: 'transit', eta: '16:00' },
+    { id: 'FX-1047', route: 'Cuenca → Guayaquil', type: 'tercero', driver: 'A. Parra', plate: 'XBA-1183', status: 'transit', eta: '13:20' },
   ];
-  const sColor = { vigente: c.green, 'vence-pronto': c.amber, vencido: c.red };
-  const sLabel = { vigente: 'VIGENTE', 'vence-pronto': 'VENCE PRONTO', vencido: 'VENCIDO' };
+  const statusColor = { transit: c.orange, loading: c.yellow, delivered: c.green };
+  const statusLabel = { transit: 'EN RUTA', loading: 'CARGANDO', delivered: 'ENTREGADO' };
+  const typeLabel = { propio: 'PROPIO', tercero: 'TERCERO' };
+  const typeColor = { propio: c.navy, tercero: c.orange };
 
   return (
-    <div style={{ width: 1100, height: 720, background: c.bg, fontFamily: F, color: c.ink, position: 'relative', overflow: 'hidden' }}>
-      {/* Sidebar */}
-      <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 200, background: '#fff', borderRight: `1px solid ${c.border}`, padding: '22px 0' }}>
-        <div style={{ padding: '0 22px 24px', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="none" stroke={c.ink} strokeWidth="1" opacity="0.3"/><circle cx="11" cy="11" r="6" fill="none" stroke={c.ink} strokeWidth="1.2" opacity="0.6"/><circle cx="11" cy="11" r="2.5" fill={c.green}/></svg>
-          <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: '-0.01em' }}>Salud OK</div>
+    <div style={{ width: 1100, height: 720, background: c.bg, fontFamily: F, color: c.ink, padding: 0, position: 'relative', overflow: 'hidden' }}>
+      {/* Top bar */}
+      <div style={{ height: 56, background: c.navy, display: 'flex', alignItems: 'center', padding: '0 28px', color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600, letterSpacing: '-0.01em', fontSize: 17 }}>
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="11" rx="2" fill="none" stroke="#fff" strokeWidth="1.4" opacity="0.5"/>
+            <path d="M6 7V5.5A1.5 1.5 0 0 1 7.5 4h9A1.5 1.5 0 0 1 18 5.5V7" fill="none" stroke="#fff" strokeWidth="1.2" opacity="0.3"/>
+            <rect x="8" y="10" width="8" height="2" rx="1" fill={c.orange}/>
+            <rect x="10" y="13.5" width="4" height="1.5" rx="0.75" fill={c.yellow} opacity="0.7"/>
+          </svg>
+          FLETESX
+          <span style={{ fontSize: 11, fontFamily: M, opacity: 0.5, marginLeft: 8, letterSpacing: '0.1em' }}>/ CENTRO DE CONTROL</span>
         </div>
-        {[
-          { l: 'Panel general', active: true },
-          { l: 'Empleados' },
-          { l: 'Exámenes' },
-          { l: 'Vencimientos' },
-          { l: 'Accidentalidad' },
-          { l: 'Cumplimiento' },
-          { l: 'Reportes' },
-        ].map((m, i) => (
-          <div key={i} style={{
-            padding: '10px 22px', fontSize: 13, color: m.active ? c.ink : c.textDim,
-            background: m.active ? c.bg : 'transparent',
-            borderLeft: m.active ? `2px solid ${c.green}` : '2px solid transparent',
-            fontWeight: m.active ? 600 : 400,
-          }}>{m.l}</div>
-        ))}
-        <div style={{ position: 'absolute', bottom: 18, left: 22, right: 22, fontSize: 10.5, color: c.textDim, fontFamily: M, lineHeight: 1.5 }}>
-          EMPRESA<br/>
-          <span style={{ color: c.ink, fontWeight: 500, fontSize: 11 }}>Industrias del Litoral S.A.</span>
+        <div style={{ flex: 1 }}/>
+        <div style={{ fontSize: 12, opacity: 0.7 }}>Carlos Reyes · Dispatch · Guayaquil</div>
+      </div>
+      {/* Page header */}
+      <div style={{ padding: '28px 28px 16px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <div>
+          <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.2em', fontFamily: M, marginBottom: 8 }}>OPERACIONES · 12 MAYO 2026</div>
+          <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: '-0.02em' }}>Movimientos activos</div>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ padding: '8px 14px', border: `1px solid ${c.border}`, fontSize: 12, background: '#fff', borderRadius: 4 }}>Filtrar</div>
+          <div style={{ padding: '8px 14px', background: c.navy, color: '#fff', fontSize: 12, fontWeight: 500, borderRadius: 4 }}>+ Nuevo despacho</div>
         </div>
       </div>
-      {/* Main */}
-      <div style={{ marginLeft: 200, padding: '24px 28px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <div>
-            <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.2em', fontFamily: M, marginBottom: 6 }}>PANEL GENERAL · ABRIL 2026</div>
-            <div style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.02em' }}>Salud Ocupacional</div>
+      {/* KPIs */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, padding: '0 28px' }}>
+        {[
+          { k: 'Movimientos hoy', v: '38', sub: '24 propios · 14 terceros' },
+          { k: 'En ruta', v: '26', sub: '68% del total', color: c.orange },
+          { k: 'Entregas a tiempo', v: '94%', sub: 'últimos 30 días', color: c.green },
+          { k: 'BASC compliance', v: '97%', sub: 'evidencia completa', color: c.green },
+        ].map((k, i) => (
+          <div key={i} style={{ background: '#fff', border: `1px solid ${c.border}`, padding: '18px 18px 16px', borderRadius: 4 }}>
+            <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>{k.k}</div>
+            <div style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', color: k.color || c.ink, lineHeight: 1 }}>{k.v}</div>
+            <div style={{ fontSize: 11, color: c.textDim, marginTop: 8 }}>{k.sub}</div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <div style={{ padding: '8px 14px', border: `1px solid ${c.border}`, fontSize: 12, background: '#fff', borderRadius: 4 }}>Abril 2026 ▾</div>
-            <div style={{ padding: '8px 14px', background: c.ink, color: '#fff', fontSize: 12, borderRadius: 4 }}>Exportar informe</div>
-          </div>
-        </div>
-
-        {/* KPIs */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 14 }}>
-          {[
-            { k: 'Empleados activos', v: '428' },
-            { k: 'Exámenes vigentes', v: '87%', color: c.green },
-            { k: 'Por vencer (30d)', v: '34', color: c.amber },
-            { k: 'Vencidos', v: '12', color: c.red },
-          ].map((k, i) => (
-            <div key={i} style={{ background: '#fff', border: `1px solid ${c.border}`, padding: '16px 18px', borderRadius: 4 }}>
-              <div style={{ fontSize: 10.5, color: c.textDim, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>{k.k}</div>
-              <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.02em', color: k.color || c.ink, lineHeight: 1 }}>{k.v}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Compliance ring + accidentality */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 10, marginBottom: 14 }}>
-          <div style={{ background: '#fff', border: `1px solid ${c.border}`, padding: 18, borderRadius: 4, display: 'flex', alignItems: 'center', gap: 18 }}>
-            <svg width="100" height="100" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="40" fill="none" stroke={c.border} strokeWidth="10"/>
-              <circle cx="50" cy="50" r="40" fill="none" stroke={c.green} strokeWidth="10"
-                strokeDasharray={`${0.87 * 2 * Math.PI * 40} ${2 * Math.PI * 40}`}
-                strokeDashoffset={0} strokeLinecap="butt" transform="rotate(-90 50 50)"/>
-              <text x="50" y="48" textAnchor="middle" fontFamily={F} fontSize="22" fontWeight="600" fill={c.ink}>87%</text>
-              <text x="50" y="62" textAnchor="middle" fontFamily={M} fontSize="8" fill={c.textDim} letterSpacing="1">COMPLIANCE</text>
-            </svg>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>Cumplimiento general</div>
-              <div style={{ fontSize: 11.5, color: c.textDim, lineHeight: 1.5 }}>
-                372 de 428 empleados con exámenes vigentes. Meta: 95%.
-              </div>
-            </div>
-          </div>
-          <div style={{ background: '#fff', border: `1px solid ${c.border}`, padding: 18, borderRadius: 4 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14 }}>
-              <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Accidentalidad por mes</div>
-              <div style={{ fontSize: 11, color: c.green, fontFamily: M }}>−40% vs. 2025</div>
-            </div>
-            <svg width="100%" height="90" viewBox="0 0 400 90" preserveAspectRatio="none">
-              <polyline fill="none" stroke={c.blue} strokeWidth="1.8"
-                points="0,30 50,42 100,38 150,55 200,48 250,62 300,58 350,72 400,68"/>
-              <polyline fill={c.blue} fillOpacity="0.08" stroke="none"
-                points="0,30 50,42 100,38 150,55 200,48 250,62 300,58 350,72 400,68 400,90 0,90"/>
-              {[30,42,38,55,48,62,58,72,68].map((y,i)=>(<circle key={i} cx={i*50} cy={y} r="2.5" fill={c.blue}/>))}
-            </svg>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, color: c.textDim, fontFamily: M, marginTop: 6 }}>
-              {['AGO','SEP','OCT','NOV','DIC','ENE','FEB','MAR','ABR'].map(m => <span key={m}>{m}</span>)}
-            </div>
-          </div>
-        </div>
-
-        {/* Table */}
+        ))}
+      </div>
+      {/* Body: table + side panels */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 12, padding: '16px 28px' }}>
         <div style={{ background: '#fff', border: `1px solid ${c.border}`, borderRadius: 4, overflow: 'hidden' }}>
-          <div style={{ padding: '12px 18px', borderBottom: `1px solid ${c.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontSize: 13, fontWeight: 600 }}>Exámenes próximos a vencer</div>
-            <div style={{ fontSize: 11, color: c.textDim, fontFamily: M }}>34 registros · vista resumida</div>
+          <div style={{ padding: '14px 18px', borderBottom: `1px solid ${c.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>Despachos del día</div>
+            <div style={{ fontSize: 11, color: c.textDim, fontFamily: M }}>flota propia + terceros</div>
           </div>
-          <div style={{ padding: '10px 18px', display: 'grid', gridTemplateColumns: '1.6fr 1fr 1.1fr 1fr 0.8fr 0.9fr', gap: 10, fontSize: 10, color: c.textDim, letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: M, borderBottom: `1px solid ${c.border}` }}>
-            <span>Empleado</span><span>Departamento</span><span>Examen</span><span>Vence</span><span>Riesgo</span><span style={{textAlign:'right'}}>Estado</span>
+          <div style={{ padding: '10px 14px', display: 'grid', gridTemplateColumns: '65px 1.4fr 0.7fr 1fr 0.6fr 0.9fr', gap: 10, fontSize: 10, color: c.textDim, letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: M, borderBottom: `1px solid ${c.border}` }}>
+            <span>ID</span><span>Ruta</span><span>Tipo</span><span>Conductor</span><span>ETA</span><span style={{textAlign:'right'}}>Estado</span>
           </div>
-          {records.map((r, i) => (
-            <div key={i} style={{
-              padding: '12px 18px', display: 'grid', gridTemplateColumns: '1.6fr 1fr 1.1fr 1fr 0.8fr 0.9fr', gap: 10,
-              fontSize: 12.5, alignItems: 'center', borderBottom: i < records.length - 1 ? `1px solid ${c.border}` : 'none',
+          {movements.map((m, i) => (
+            <div key={m.id} style={{
+              padding: '14px', display: 'grid', gridTemplateColumns: '65px 1.4fr 0.7fr 1fr 0.6fr 0.9fr', gap: 10,
+              fontSize: 12.5, alignItems: 'center', borderBottom: i < movements.length - 1 ? `1px solid ${c.border}` : 'none',
             }}>
-              <span style={{ fontWeight: 500 }}>{r.name}</span>
-              <span style={{ color: c.textDim }}>{r.dept}</span>
-              <span>{r.exam}</span>
-              <span style={{ fontFamily: M, color: c.textDim, fontSize: 11.5 }}>{r.exp}</span>
-              <span style={{ fontSize: 10.5, fontFamily: M, textTransform: 'uppercase', letterSpacing: '0.08em',
-                color: r.risk === 'alto' ? c.red : r.risk === 'medio' ? c.amber : c.textDim }}>{r.risk}</span>
+              <span style={{ fontFamily: M, color: c.textDim }}>{m.id}</span>
+              <span style={{ fontWeight: 500 }}>{m.route}</span>
+              <span>
+                <span style={{
+                  display: 'inline-block', padding: '2px 6px', borderRadius: 2,
+                  background: typeColor[m.type] + '18', color: typeColor[m.type],
+                  fontSize: 9.5, fontFamily: M, letterSpacing: '0.08em', fontWeight: 600,
+                }}>{typeLabel[m.type]}</span>
+              </span>
+              <span style={{ color: c.textDim }}>{m.driver}</span>
+              <span style={{ fontFamily: M, color: c.textDim, fontSize: 11 }}>{m.eta}</span>
               <span style={{ textAlign: 'right' }}>
                 <span style={{
                   display: 'inline-block', padding: '3px 8px', borderRadius: 2,
-                  background: sColor[r.status] + '22', color: sColor[r.status],
+                  background: statusColor[m.status] + '22', color: statusColor[m.status],
                   fontSize: 9.5, fontFamily: M, letterSpacing: '0.1em', fontWeight: 600,
-                }}>{sLabel[r.status]}</span>
+                }}>{statusLabel[m.status]}</span>
               </span>
             </div>
           ))}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ background: '#fff', border: `1px solid ${c.border}`, borderRadius: 4, padding: 18 }}>
+            <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Flota propia vs. terceros</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <svg width="90" height="90" viewBox="0 0 90 90">
+                <circle cx="45" cy="45" r="35" fill="none" stroke={c.border} strokeWidth="12"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke={c.navy} strokeWidth="12"
+                  strokeDasharray={`${0.63 * 2 * Math.PI * 35} ${2 * Math.PI * 35}`}
+                  strokeLinecap="butt" transform="rotate(-90 45 45)"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke={c.orange} strokeWidth="12"
+                  strokeDasharray={`${0.37 * 2 * Math.PI * 35} ${2 * Math.PI * 35}`}
+                  strokeDashoffset={`${-0.63 * 2 * Math.PI * 35}`}
+                  strokeLinecap="butt" transform="rotate(-90 45 45)"/>
+              </svg>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: 2, background: c.navy }}/>
+                  <span style={{ fontSize: 12 }}>Propia <strong>63%</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: 2, background: c.orange }}/>
+                  <span style={{ fontSize: 12 }}>Terceros <strong>37%</strong></span>
+                </div>
+              </div>
+            </div>
+            <div style={{ fontSize: 11, color: c.textDim, marginTop: 14, fontFamily: M }}>
+              Misma evidencia BASC en ambos canales
+            </div>
+          </div>
+          <div style={{ background: '#fff', border: `1px solid ${c.border}`, borderRadius: 4, padding: 18 }}>
+            <div style={{ fontSize: 11, color: c.textDim, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Entregas por mes</div>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, height: 90, borderBottom: `1px solid ${c.border}`, paddingBottom: 4 }}>
+              {[42, 58, 53, 67, 74, 71, 88, 82].map((v, i) => (
+                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                  <div style={{ width: '100%', height: v, background: i === 7 ? c.orange : c.navy, opacity: i === 7 ? 1 : 0.8 }}/>
+                  <div style={{ fontSize: 9, color: c.textDim, fontFamily: M }}>{['OCT','NOV','DIC','ENE','FEB','MAR','ABR','MAY'][i]}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 11, color: c.textDim, marginTop: 12, fontFamily: M }}>
+              Tendencia: <span style={{ color: c.green }}>+31% en 8 meses</span>
+            </div>
+          </div>
+          <div style={{ background: c.navy, color: '#fff', borderRadius: 4, padding: 18 }}>
+            <div style={{ fontSize: 11, opacity: 0.6, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>BASC · Alerta</div>
+            <div style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.45, marginBottom: 14 }}>
+              2 movimientos terceros sin foto de sello de seguridad. Evidencia pendiente antes de cierre.
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ padding: '8px 12px', background: c.orange, color: '#fff', fontSize: 11.5, fontWeight: 600, borderRadius: 3 }}>Ver pendientes</div>
+              <div style={{ padding: '8px 12px', border: '1px solid rgba(255,255,255,0.2)', fontSize: 11.5, borderRadius: 3 }}>Notificar conductor</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-Object.assign(window, { LineasDashboard, SaludDashboard });
+Object.assign(window, { LineasDashboard, FletesXDashboard });

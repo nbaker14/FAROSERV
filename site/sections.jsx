@@ -360,11 +360,11 @@ function Products() {
           fontFamily: '"JetBrains Mono", monospace',
         }}>
           <div>
-            <div style={{ color: BRAND.text, fontSize: 22, fontWeight: 600, fontFamily: 'inherit' }}>2</div>
+            <div style={{ color: BRAND.text, fontSize: 22, fontWeight: 600, fontFamily: 'inherit' }}>3</div>
             <div style={{ letterSpacing: '0.08em' }}>PÚBLICOS</div>
           </div>
           <div>
-            <div style={{ color: BRAND.text, fontSize: 22, fontWeight: 600, fontFamily: 'inherit' }}>2</div>
+            <div style={{ color: BRAND.text, fontSize: 22, fontWeight: 600, fontFamily: 'inherit' }}>1</div>
             <div style={{ letterSpacing: '0.08em' }}>A MEDIDA</div>
           </div>
         </div>

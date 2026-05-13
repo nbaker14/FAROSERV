@@ -42,6 +42,18 @@ const PRODUCTS = [
     screenshot: 'camaron-screenshot.png',
   },
   {
+    id: 'fletesx',
+    name: 'FLETESX',
+    tagline: 'Un solo panel para tu flota y tus terceros.',
+    url: 'www.fletesx.com',
+    category: 'Plataforma pública',
+    badge: 'Live',
+    description: 'Centro de control para operadores de transporte que coordinan flota propia y carriers subcontratados desde un mismo panel. Despacho, seguimiento en tiempo real, app de conductor y portal de clientes — con cumplimiento BASC integrado al modelo de datos.',
+    industry: 'Transporte · Logística',
+    color: '#F37021',
+    mockup: 'FletesXDashboard',
+  },
+  {
     id: 'eljuri-lines',
     name: 'LÍNEAS',
     tagline: 'Almacenes Juan Eljuri',
@@ -52,18 +64,6 @@ const PRODUCTS = [
     industry: 'Dispensadores de cerveza',
     color: '#C8924A',
     mockup: 'LineasDashboard',
-  },
-  {
-    id: 'salud',
-    name: 'SALUD OCUPACIONAL',
-    tagline: 'Solución privada',
-    url: 'Cliente corporativo',
-    category: 'A medida',
-    badge: 'Privado',
-    description: 'Control de salud ocupacional de empleados: exámenes, vencimientos, historial médico y cumplimiento normativo.',
-    industry: 'RRHH / Salud',
-    color: '#8BA67C',
-    mockup: 'SaludDashboard',
   },
 ];
 
